@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+        #total_tx{
+            position: relative;
+        }
+        #text{
+            color: white;
+            text-align: center;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(19 103 168 / 49%);
+            border-radius: 10px;
+            display: none;
+        }
+        #text span{
+            font-size: 34px;
+            letter-spacing: 1px;
+            padding: 0px 8px;
+            font-weight: 700;
+            font-family: auto;
+            font-style: italic;
+            color: #b2ff9b;
+            background: linear-gradient(45deg, #b91a1a, #ea86a5db);
+            padding: 2px 15px;
+            border-radius: 9px;
+        }
+        #text i{
+            font-size: 36px;
+            color: #22ddc3;
+            background-color: black;
+            border-radius: 49%;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="container">
+            <form class="col-md-6 m-auto py-5">
+                <div class="input-group mb-3">
+                    <input id="Country_name" type="text" class="form-control" placeholder="Enter a location for Weather ...">
+                    <div class="input-group-append">
+                        <button onclick="EnterCountry()" type="button" class="btn btn-danger">Search</button>
+                    </div>
+                </div>
+            </form>
+            <div id="total_tx" class="weather-status text-white text-center">
+                <div id="icon"></div>
+                <h1 id="city-name"></h1>
+                <h3><span id="Temp"></span>&deg;C</h3>
+                <h1 id="Clouds" class="lead"></h1>
+            </div>
+            <div id="text">
+                <h5>Your <span>City</span> name in not currect..<i class="fa-solid fa-face-sad-cry"></i> Please Corect City Name and Try Again letter....</h5>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+    function EnterCountry(){
+        const apiKey = "8d5ca98b8bac4e5eb736ba40d9dcd9c7";
+        const countryName = document.getElementById('Country_name').value;
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${countryName}&units=metric&appid=${apiKey}`)
+        .then(res => res.json())
+        .then(json => dinamicWeather(json))
+
+        function dinamicWeather(X){
+            const eror = X.cod;
+            if(eror == 404){
+                DisplayHide();
+                Displayshow();
+            }
+            else{
+                const cityName = X.name;
+                document.getElementById('city-name').innerText = cityName;
+                const temp = X.main.temp;
+                document.getElementById('Temp').innerText = temp;
+                const clouds = X.weather[0];
+                const fClouds = clouds.main;
+                document.getElementById('Clouds').innerText = fClouds;
+                const Icon = clouds.icon;
+                icon(Icon);  
+                DisplayHide1();
+                Displayshow1()
+            
+            }           
+        }
+        function icon(Y){
+            const Icon = document.getElementById('icon');
+            Icon.innerHTML = `<img src="https://openweathermap.org/img/wn/${Y}@2x.png" alt=""> `;
+        }
+        function DisplayHide(){
+            const hide = document.getElementById('total_tx');
+            hide.style.display = 'none';
+        }
+        function DisplayHide1(){
+            const hide = document.getElementById('total_tx');
+            hide.style.display = 'block';
+        }
+        function Displayshow(){
+            const Nots = document.getElementById('text');
+            Nots.style.display = 'block';
+        }
+        function Displayshow1(){
+            const Nots = document.getElementById('text');
+            Nots.style.display = 'none';
+        }
+
+}
+
+function atoCount(X){
+    const apiKey = "8d5ca98b8bac4e5eb736ba40d9dcd9c7";
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${X}&units=metric&appid=${apiKey}`)
+        .then(res => res.json())
+        .then(json => liveDeta(json))
+
+        function liveDeta(K){
+            const cityName = K.name;
+                document.getElementById('city-name').innerText = cityName;
+                const temp = K.main.temp;
+                document.getElementById('Temp').innerText = temp;
+                const clouds = K.weather[0];
+                const fClouds = clouds.main;
+                document.getElementById('Clouds').innerText = fClouds;
+                const Icon = clouds.icon;
+                icon(Icon); 
+        }
+        function icon(Y){
+            const Icon = document.getElementById('icon');
+            Icon.innerHTML = `<img src="https://openweathermap.org/img/wn/${Y}@2x.png" alt=""> `;
+        }
+}
+setTimeout(() => {
+    atoCount("Khulna");
+}, 0);
+
+</script>
+</body>
+</html>
